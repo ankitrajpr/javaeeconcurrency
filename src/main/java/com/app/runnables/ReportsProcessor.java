@@ -29,25 +29,24 @@ public class ReportsProcessor implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws Exception {
-boolean reportGenerated = false;
+        boolean reportGenerated = false;
         List<BankAccountTransaction> transactions = dao.getTransactionsForAccount(account);
-        File file = new File("/Users/ankitrajprasad/Downloads/Reports/"+account.getAccNumber()+ "_tx_report.txt");
-
+        File file = new File("/Users/ankitrajprasad/Downloads/Reports/" + account.getAccNumber() + "_tx_report.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
         for (BankAccountTransaction transaction : transactions) {
 
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter(file)))
-            {
-                writer.write("AccountNumber : "+transaction.getAccNumber());
-                writer.write("Transcation type : "+transaction.getTxType());
-                writer.write("Tx id : "+transaction.getTxId());
-                writer.write("Amount : "+transaction.getAmount());
-                writer.write("Transaction Date : "+transaction.getTxDate());
-                writer.newLine();
-                writer.flush();
-            }
-            reportGenerated = true;
 
+                writer.write("AccountNumber : " + transaction.getAccNumber());
+                writer.write("Transcation type : " + transaction.getTxType());
+                writer.write("Tx id : " + transaction.getTxId());
+                writer.write("Amount : " + transaction.getAmount());
+                writer.write("Transaction Date : " + transaction.getTxDate());
+                writer.newLine();
+
+            }
+            writer.flush();//Once Iterations is completed, do flush to see Data is definitely written out to the file.
         }
-        return  reportGenerated;
+        reportGenerated = true; //True basically when WriterObject job is completed
+        return reportGenerated;
     }
 }

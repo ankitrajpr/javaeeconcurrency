@@ -74,6 +74,7 @@ public class BankAccountDao {
                 ));
                 transaction.setTxId(set.getInt("tx_id"));
                 transaction.setTxType(set.getString("transcation_type"));
+                transactions.add(transaction);
             }
 
 
